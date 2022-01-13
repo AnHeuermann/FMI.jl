@@ -15,11 +15,10 @@ function fmi2SetDebugLogging(c::fmi2Component)
 end
 
 """
-TODO: FMI specification reference.
+    fmi2SetupExperiment(c::fmi2Component, startTime::Real = 0.0, stopTime::Real = startTime; tolerance::Real = 0.0)
 
-Setup the simulation but without defining all of the parameters.
-
-For more information call ?fmi2SetupExperiment
+Informs the FMU to setup the experiment.
+This function must be called after `fmi2Instantiate` and before `fmi2EnterInitializationMode` is called.
 """
 function fmi2SetupExperiment(c::fmi2Component, startTime::Real = 0.0, stopTime::Real = startTime; tolerance::Real = 0.0)
 
@@ -32,11 +31,10 @@ function fmi2SetupExperiment(c::fmi2Component, startTime::Real = 0.0, stopTime::
 end
 
 """
-TODO: FMI specification reference.
+    fmi2GetReal(c::fmi2Component, vr::fmi2ValueReferenceFormat)
 
-Get the values of an array of fmi2Real variables.
+Return array with values of fmi2Real variables.
 
-For more information call ?fmi2GetReal!
 """
 function fmi2GetReal(c::fmi2Component, vr::fmi2ValueReferenceFormat)
 
@@ -76,11 +74,9 @@ function fmi2GetReal!(c::fmi2Component, vr::fmi2ValueReferenceFormat, values::Re
 end
 
 """
-TODO: FMI specification reference.
+    fmi2SetReal(c::fmi2Component, vr::fmi2ValueReferenceFormat, values::Union{Array{<:Real}, <:Real})
 
 Set the values of an array of fmi2Real variables.
-
-For more information call ?fmi2SetReal
 """
 function fmi2SetReal(c::fmi2Component, vr::fmi2ValueReferenceFormat, values::Union{Array{<:Real}, <:Real})
 

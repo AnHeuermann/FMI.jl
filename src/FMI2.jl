@@ -710,33 +710,28 @@ function fmi2SetDebugLogging(fmu::FMU2)
 end
 
 """
-TODO: FMI specification reference.
+    fmi2SetupExperiment(fmu::FMU2, startTime::Real = 0.0, stopTime::Real = startTime; tolerance::Real = 0.0)
 
-Setup the simulation.
-
-For more information call ?fmi2SetupExperiment
+Informs the FMU to setup the experiment.
+This function must be called after `fmi2Instantiate` and before `fmi2EnterInitializationMode` is called.
 """
 function fmi2SetupExperiment(fmu::FMU2, startTime::Real = 0.0, stopTime::Real = startTime; tolerance::Real = 0.0)
     fmi2SetupExperiment(fmu.components[end], startTime, stopTime; tolerance=tolerance)
 end
 
 """
-TODO: FMI specification reference.
+    fmi2EnterInitializationMode(fmu::FMU2)
 
-FMU enters Initialization mode.
-
-For more information call ?fmi2EnterInitializationMode
+FMU enters Initialization Mode.
 """
 function fmi2EnterInitializationMode(fmu::FMU2)
     fmi2EnterInitializationMode(fmu.components[end])
 end
 
 """
-TODO: FMI specification reference.
+    fmi2ExitInitializationMode(fmu::FMU2)
 
 FMU exits Initialization mode.
-
-For more information call ?fmi2ExitInitializationMode
 """
 function fmi2ExitInitializationMode(fmu::FMU2)
     fmi2ExitInitializationMode(fmu.components[end])
@@ -794,18 +789,16 @@ function fmi2GetRealOutputDerivatives(fmu::FMU2, vr::fmi2ValueReferenceFormat, o
 end
 
 """
-TODO: FMI specification reference.
+    fmi2SetReal(fmu::FMU2, vr::fmi2ValueReferenceFormat, values::Union{Array{<:Real}, <:Real})
 
 Set the values of an array of fmi2Real variables.
-
-For more information call ?fmi2SetReal
 """
 function fmi2SetReal(fmu::FMU2, vr::fmi2ValueReferenceFormat, values::Union{Array{<:Real}, <:Real})
     fmi2SetReal(fmu.components[end], vr, values)
 end
 
-""" 
-ToDO 
+"""
+ToDO
 """
 function fmi2SetRealInputDerivatives(fmu::FMU2, vr::fmi2ValueReferenceFormat, order, values)
     fmi2SetRealInputDerivatives(fmu.components[end], vr, order, values)

@@ -102,9 +102,21 @@ mutable struct fmi2CallbackFunctions
 end
 
 """
-Source: FMISpec2.0.2[p.21]: 2.1.5 Creation, Destruction and Logging of FMU Instances
+    cbLogger(componentEnvironment::Ptr{Cvoid}, instanceName::Ptr{Cchar}, status::Cuint, category::Ptr{Cchar}, message::Ptr{Cchar})
 
-Function that is called in the FMU, usually if an fmi2XXX function, does not behave as desired. If “logger” is called with “status = fmi2OK”, then the message is a pure information message. “instanceName” is the instance name of the model that calls this function. “category” is the category of the message. The meaning of “category” is defined by the modeling environment that generated the FMU. Depending on this modeling environment, none, some or all allowed values of “category” for this FMU are defined in the modelDescription.xml file via element “<fmiModelDescription><LogCategories>”, see section 2.2.4. Only messages are provided by function logger that have a category according to a call to fmi2SetDebugLogging (see below). Argument “message” is provided in the same way and with the same format control as in function “printf” from the C standard library. [Typically, this function prints the message and stores it optionally in a log file.]
+Callback function that is called in the FMU to log information, usually if an fmi2XXX function, does not behave as desired.
+
+### Function arguments
+If `status=fmi2OK`, then the message is a pure information message.
+`instanceName` is the instance name of the model that calls this function.
+`category` is the category of the message. Categories are defined by the modeling environment that generated the FMU.
+Depending on this modeling environment, none, some or all allowed values of `category` for this FMU are defined in the modelDescription.xml file
+via element “<fmiModelDescription><LogCategories>”, see section 2.2.4.
+Only messages are provided by function logger that have a category according to a call to fmi2SetDebugLogging (see below).
+Argument `message` is provided in the same way and with the same format control as in function “printf” from the C standard library.
+
+#### Source
+FMISpec2.0.2[p.21]: 2.1.5 Creation, Destruction and Logging of FMU Instances
 """
 function cbLogger(componentEnvironment::Ptr{Cvoid},
             instanceName::Ptr{Cchar},
@@ -526,16 +538,20 @@ function fmi2SetDebugLogging(c::fmi2Component, logginOn::fmi2Boolean, nCategorie
 end
 
 """
-Source: FMISpec2.0.2[p.23]: 2.1.6 Initialization, Termination, and Resetting an FMU
+    fmi2SetupExperiment(c::fmi2Component, toleranceDefined::fmi2Boolean, tolerance::fmi2Real, startTime::fmi2Real, stopTimeDefined::fmi2Boolean, stopTime::fmi2Real)
 
-Informs the FMU to setup the experiment. This function must be called after fmi2Instantiate and before fmi2EnterInitializationMode is called.The function controls debug logging that is output via the logger function callback. If loggingOn = fmi2True, debug logging is enabled, otherwise it is switched off.
+Informs the FMU to setup the experiment.
+This function must be called after `fmi2Instantiate` and before `fmi2EnterInitializationMode` is called.
+
+#### Source
+FMISpec2.0.2[p.23]: 2.1.6 Initialization, Termination, and Resetting an FMU
 """
 function fmi2SetupExperiment(c::fmi2Component,
-    toleranceDefined::fmi2Boolean,
-    tolerance::fmi2Real,
-    startTime::fmi2Real,
-    stopTimeDefined::fmi2Boolean,
-    stopTime::fmi2Real)
+                             toleranceDefined::fmi2Boolean,
+                             tolerance::fmi2Real,
+                             startTime::fmi2Real,
+                             stopTimeDefined::fmi2Boolean,
+                             stopTime::fmi2Real)
 
     status = ccall(c.fmu.cSetupExperiment,
                 Cuint,
@@ -550,9 +566,16 @@ function fmi2SetupExperiment(c::fmi2Component,
 end
 
 """
-Source: FMISpec2.0.2[p.23]: 2.1.6 Initialization, Termination, and Resetting an FMU
+    fmi2EnterInitializationMode(c::fmi2Component)
 
-Informs the FMU to enter Initialization Mode. Before calling this function, all variables with attribute <ScalarVariable initial = "exact" or "approx"> can be set with the “fmi2SetXXX” functions (the ScalarVariable attributes are defined in the Model Description File, see section 2.2.7). Setting other variables is not allowed. Furthermore, fmi2SetupExperiment must be called at least once before calling fmi2EnterInitializationMode, in order that startTime is defined.
+Informs the FMU to enter Initialization Mode.
+
+Before calling this function, all variables with attribute <ScalarVariable initial = "exact" or "approx"> can be set with the
+`fmi2SetReal`, `fmi2SetInteger`, `fmi2SetBoolean`, `fmi2SetString` functions (the ScalarVariable attributes are defined in the Model Description File, see section 2.2.7).
+Setting other variables is not allowed. Furthermore, `fmi2SetupExperiment` must be called at least once before calling `fmi2EnterInitializationMode`, in order that startTime is defined.
+
+#### Source
+FMISpec2.0.2[p.23]: 2.1.6 Initialization, Termination, and Resetting an FMU
 """
 function fmi2EnterInitializationMode(c::fmi2Component)
     ccall(c.fmu.cEnterInitializationMode,
@@ -562,9 +585,12 @@ function fmi2EnterInitializationMode(c::fmi2Component)
 end
 
 """
-Source: FMISpec2.0.2[p.23]: 2.1.6 Initialization, Termination, and Resetting an FMU
+    fmi2ExitInitializationMode(c::fmi2Component)
 
 Informs the FMU to exit Initialization Mode.
+
+#### Source
+FMISpec2.0.2[p.23]: 2.1.6 Initialization, Termination, and Resetting an FMU
 """
 function fmi2ExitInitializationMode(c::fmi2Component)
     ccall(c.fmu.cExitInitializationMode,
@@ -592,9 +618,12 @@ function fmi2Reset(c::fmi2Component)
 end
 
 """
-Source: FMISpec2.0.2[p.24]: 2.1.7 Getting and Setting Variable Values
+    fmi2GetReal!(c::fmi2Component, vr::Array{fmi2ValueReference}, nvr::Csize_t, value::Array{fmi2Real})
 
 Functions to get and set values of variables idetified by their valueReference
+
+#### Source
+FMISpec2.0.2[p.24]: 2.1.7 Getting and Setting Variable Values
 """
 function fmi2GetReal!(c::fmi2Component, vr::Array{fmi2ValueReference}, nvr::Csize_t, value::Array{fmi2Real})
     ccall(c.fmu.cGetReal,
@@ -604,9 +633,13 @@ function fmi2GetReal!(c::fmi2Component, vr::Array{fmi2ValueReference}, nvr::Csiz
 end
 
 """
-Source: FMISpec2.0.2[p.24]: 2.1.7 Getting and Setting Variable Values
+fmi2SetReal(c::fmi2Component, vr::Array{fmi2ValueReference}, nvr::Csize_t, value::Array{fmi2Real})
 
-Functions to get and set values of variables idetified by their valueReference
+Set parameters, inputs, and start values, and re-initialize caching of variables that depend on
+these variables.
+
+#### Source
+FMISpec2.0.2[p.24]: 2.1.7 Getting and Setting Variable Values
 """
 function fmi2SetReal(c::fmi2Component, vr::Array{fmi2ValueReference}, nvr::Csize_t, value::Array{fmi2Real})
     status = ccall(c.fmu.cSetReal,

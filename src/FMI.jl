@@ -330,6 +330,8 @@ function fmiSetDebugLogging(s::fmi2Struct)
 end
 
 """
+    fmiSetupExperiment(fmu::fmi2Struct, startTime::Real = 0.0, stopTime::Real = startTime; tolerance::Real = 0.0)
+
 Initialize the Simulation boundries
 """
 function fmiSetupExperiment(fmu::fmi2Struct, startTime::Real = 0.0, stopTime::Real = startTime; tolerance::Real = 0.0)
@@ -338,6 +340,8 @@ end
 
 
 """
+    fmiEnterInitializationMode(s::fmi2Struct)
+
 Informs the FMU to enter initializaton mode, version independent.
 """
 function fmiEnterInitializationMode(s::fmi2Struct)
@@ -346,6 +350,8 @@ end
 
 
 """
+    fmiExitInitializationMode(s::fmi2Struct)
+
 Informs the FMU to exit initialization mode, version independent.
 """
 function fmiExitInitializationMode(s::fmi2Struct)
